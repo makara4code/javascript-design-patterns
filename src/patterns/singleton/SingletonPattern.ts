@@ -424,7 +424,7 @@ export class AppStore {
       const users = await mockApi.users.getAll();
       this.setState({ users, loading: false, lastUpdated: new Date() });
       Logger.getInstance().info('Users loaded successfully', 'AppStore');
-    } catch (error) {
+    } catch {
       this.setState({ error: 'Failed to load users', loading: false });
       Logger.getInstance().error('Failed to load users', 'AppStore');
     }
@@ -436,7 +436,7 @@ export class AppStore {
       const products = await mockApi.products.getAll();
       this.setState({ products, loading: false, lastUpdated: new Date() });
       Logger.getInstance().info('Products loaded successfully', 'AppStore');
-    } catch (error) {
+    } catch {
       this.setState({ error: 'Failed to load products', loading: false });
       Logger.getInstance().error('Failed to load products', 'AppStore');
     }
@@ -448,7 +448,7 @@ export class AppStore {
       const tasks = await mockApi.tasks.getAll();
       this.setState({ tasks, loading: false, lastUpdated: new Date() });
       Logger.getInstance().info('Tasks loaded successfully', 'AppStore');
-    } catch (error) {
+    } catch {
       this.setState({ error: 'Failed to load tasks', loading: false });
       Logger.getInstance().error('Failed to load tasks', 'AppStore');
     }
@@ -470,7 +470,7 @@ export class AppStore {
         lastUpdated: new Date(),
       });
       Logger.getInstance().info('All data loaded successfully', 'AppStore');
-    } catch (error) {
+    } catch {
       this.setState({ error: 'Failed to load data', loading: false });
       Logger.getInstance().error('Failed to load data', 'AppStore');
     }

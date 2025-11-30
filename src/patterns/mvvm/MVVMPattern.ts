@@ -195,7 +195,7 @@ export class ProductViewModel {
         loading: false,
       });
       this.updateFilteredProducts();
-    } catch (error) {
+    } catch {
       this.setState({
         loading: false,
         error: 'Failed to load products',

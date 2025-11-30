@@ -43,7 +43,7 @@ export const SingletonPatternDemo = () => {
   useEffect(() => {
     const unsubscribe = appStore.subscribe(setStoreState);
     return unsubscribe;
-  }, []);
+  }, [appStore]);
 
   const [newConfigKey, setNewConfigKey] = useState("");
   const [newConfigValue, setNewConfigValue] = useState("");
