@@ -41,12 +41,9 @@ export class UserPrototype implements Cloneable<UserPrototype> {
 
   clone(): UserPrototype {
     // Deep clone the preferences object
-    return new UserPrototype(
-      this.name,
-      this.email,
-      this.role,
-      { ...this.preferences }
-    );
+    return new UserPrototype(this.name, this.email, this.role, {
+      ...this.preferences,
+    });
   }
 
   greet(): string {
@@ -66,7 +63,7 @@ export interface VehicleConfig {
   specs: {
     engine: string;
     horsepower: number;
-    transmission: 'manual' | 'automatic';
+    transmission: "manual" | "automatic";
   };
 }
 
@@ -98,27 +95,27 @@ export class VehiclePrototype implements Cloneable<VehiclePrototype> {
 // Pre-configured vehicle prototypes
 export const VehiclePrototypes = {
   sedan: new VehiclePrototype({
-    brand: 'Generic',
-    model: 'Sedan',
+    brand: "Generic",
+    model: "Sedan",
     year: 2024,
-    features: ['Air Conditioning', 'Power Windows', 'Bluetooth'],
-    specs: { engine: '2.0L I4', horsepower: 150, transmission: 'automatic' },
+    features: ["Air Conditioning", "Power Windows", "Bluetooth"],
+    specs: { engine: "2.0L I4", horsepower: 150, transmission: "automatic" },
   }),
 
   suv: new VehiclePrototype({
-    brand: 'Generic',
-    model: 'SUV',
+    brand: "Generic",
+    model: "SUV",
     year: 2024,
-    features: ['Air Conditioning', 'Power Windows', '4WD', 'Roof Rack'],
-    specs: { engine: '3.5L V6', horsepower: 280, transmission: 'automatic' },
+    features: ["Air Conditioning", "Power Windows", "4WD", "Roof Rack"],
+    specs: { engine: "3.5L V6", horsepower: 280, transmission: "automatic" },
   }),
 
   sports: new VehiclePrototype({
-    brand: 'Generic',
-    model: 'Sports Car',
+    brand: "Generic",
+    model: "Sports Car",
     year: 2024,
-    features: ['Sport Suspension', 'Launch Control', 'Carbon Fiber Body'],
-    specs: { engine: '4.0L V8', horsepower: 450, transmission: 'manual' },
+    features: ["Sport Suspension", "Launch Control", "Carbon Fiber Body"],
+    specs: { engine: "4.0L V8", horsepower: 450, transmission: "manual" },
   }),
 };
 
@@ -136,13 +133,15 @@ export const createVehicle = (
       vehicle.config.features = [...customizations.features];
     }
     if (customizations.specs) {
-      vehicle.config.specs = { ...vehicle.config.specs, ...customizations.specs };
+      vehicle.config.specs = {
+        ...vehicle.config.specs,
+        ...customizations.specs,
+      };
     }
   }
 
   return vehicle;
 };
-
 
 // ============================================
 // EXAMPLE 3: Document Template Prototype
@@ -176,7 +175,7 @@ export class DocumentPrototype implements Cloneable<DocumentPrototype> {
     return new DocumentPrototype(
       this.title,
       this.author,
-      this.sections.map(s => ({ ...s })),
+      this.sections.map((s) => ({ ...s })),
       { ...this.metadata }
     );
   }
@@ -187,7 +186,7 @@ export class DocumentPrototype implements Cloneable<DocumentPrototype> {
   }
 
   removeSection(title: string): void {
-    this.sections = this.sections.filter(s => s.title !== title);
+    this.sections = this.sections.filter((s) => s.title !== title);
   }
 
   getSummary(): string {
@@ -198,44 +197,43 @@ export class DocumentPrototype implements Cloneable<DocumentPrototype> {
 // Pre-configured document templates
 export const DocumentTemplates = {
   report: new DocumentPrototype(
-    'Report Template',
-    '',
+    "Report Template",
+    "",
     [
-      { title: 'Executive Summary', content: '', order: 1 },
-      { title: 'Introduction', content: '', order: 2 },
-      { title: 'Findings', content: '', order: 3 },
-      { title: 'Conclusion', content: '', order: 4 },
+      { title: "Executive Summary", content: "", order: 1 },
+      { title: "Introduction", content: "", order: 2 },
+      { title: "Findings", content: "", order: 3 },
+      { title: "Conclusion", content: "", order: 4 },
     ],
-    { type: 'report', format: 'pdf' }
+    { type: "report", format: "pdf" }
   ),
 
   proposal: new DocumentPrototype(
-    'Proposal Template',
-    '',
+    "Proposal Template",
+    "",
     [
-      { title: 'Overview', content: '', order: 1 },
-      { title: 'Problem Statement', content: '', order: 2 },
-      { title: 'Proposed Solution', content: '', order: 3 },
-      { title: 'Budget', content: '', order: 4 },
-      { title: 'Timeline', content: '', order: 5 },
+      { title: "Overview", content: "", order: 1 },
+      { title: "Problem Statement", content: "", order: 2 },
+      { title: "Proposed Solution", content: "", order: 3 },
+      { title: "Budget", content: "", order: 4 },
+      { title: "Timeline", content: "", order: 5 },
     ],
-    { type: 'proposal', format: 'pdf' }
+    { type: "proposal", format: "pdf" }
   ),
 
   readme: new DocumentPrototype(
-    'README Template',
-    '',
+    "README Template",
+    "",
     [
-      { title: 'Project Name', content: '', order: 1 },
-      { title: 'Installation', content: '', order: 2 },
-      { title: 'Usage', content: '', order: 3 },
-      { title: 'Contributing', content: '', order: 4 },
-      { title: 'License', content: '', order: 5 },
+      { title: "Project Name", content: "", order: 1 },
+      { title: "Installation", content: "", order: 2 },
+      { title: "Usage", content: "", order: 3 },
+      { title: "Contributing", content: "", order: 4 },
+      { title: "License", content: "", order: 5 },
     ],
-    { type: 'documentation', format: 'md' }
+    { type: "documentation", format: "md" }
   ),
 };
-
 
 // ============================================
 // EXAMPLE 4: Game Character Prototype Registry
@@ -281,7 +279,7 @@ export class GameCharacter implements Cloneable<GameCharacter> {
       this.characterClass,
       this.level,
       { ...this.stats },
-      this.abilities.map(a => ({ ...a }))
+      this.abilities.map((a) => ({ ...a }))
     );
   }
 
@@ -329,35 +327,44 @@ export class CharacterRegistry {
 // Pre-configured character registry
 export const characterRegistry = new CharacterRegistry();
 
-characterRegistry.register('warrior', new GameCharacter(
-  'Warrior',
-  'Warrior',
-  1,
-  { health: 100, attack: 15, defense: 12, speed: 8 },
-  [
-    { name: 'Slash', damage: 20, cooldown: 0 },
-    { name: 'Shield Bash', damage: 15, cooldown: 3 },
-  ]
-));
+characterRegistry.register(
+  "warrior",
+  new GameCharacter(
+    "Warrior",
+    "Warrior",
+    1,
+    { health: 100, attack: 15, defense: 12, speed: 8 },
+    [
+      { name: "Slash", damage: 20, cooldown: 0 },
+      { name: "Shield Bash", damage: 15, cooldown: 3 },
+    ]
+  )
+);
 
-characterRegistry.register('mage', new GameCharacter(
-  'Mage',
-  'Mage',
-  1,
-  { health: 60, attack: 20, defense: 5, speed: 10 },
-  [
-    { name: 'Fireball', damage: 30, cooldown: 2 },
-    { name: 'Ice Shard', damage: 25, cooldown: 1 },
-  ]
-));
+characterRegistry.register(
+  "mage",
+  new GameCharacter(
+    "Mage",
+    "Mage",
+    1,
+    { health: 60, attack: 20, defense: 5, speed: 10 },
+    [
+      { name: "Fireball", damage: 30, cooldown: 2 },
+      { name: "Ice Shard", damage: 25, cooldown: 1 },
+    ]
+  )
+);
 
-characterRegistry.register('rogue', new GameCharacter(
-  'Rogue',
-  'Rogue',
-  1,
-  { health: 70, attack: 18, defense: 7, speed: 15 },
-  [
-    { name: 'Backstab', damage: 35, cooldown: 3 },
-    { name: 'Poison Dart', damage: 15, cooldown: 1 },
-  ]
-));
+characterRegistry.register(
+  "rogue",
+  new GameCharacter(
+    "Rogue",
+    "Rogue",
+    1,
+    { health: 70, attack: 18, defense: 7, speed: 15 },
+    [
+      { name: "Backstab", damage: 35, cooldown: 3 },
+      { name: "Poison Dart", damage: 15, cooldown: 1 },
+    ]
+  )
+);

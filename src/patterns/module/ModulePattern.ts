@@ -31,13 +31,13 @@ export const CounterModule = (() => {
   return {
     increment(): number {
       count++;
-      logChange('Incremented to', count);
+      logChange("Incremented to", count);
       return count;
     },
 
     decrement(): number {
       count--;
-      logChange('Decremented to', count);
+      logChange("Decremented to", count);
       return count;
     },
 
@@ -47,7 +47,7 @@ export const CounterModule = (() => {
 
     reset(): void {
       count = 0;
-      logChange('Reset to', count);
+      logChange("Reset to", count);
     },
 
     getHistory(): readonly number[] {
@@ -56,7 +56,6 @@ export const CounterModule = (() => {
     },
   };
 })();
-
 
 // ============================================
 // EXAMPLE 2: Shopping Cart Module
@@ -76,7 +75,7 @@ export const createShoppingCart = () => {
 
   // Private helper functions
   const findItemIndex = (id: number): number => {
-    return items.findIndex(item => item.id === id);
+    return items.findIndex((item) => item.id === id);
   };
 
   const calculateSubtotal = (): number => {
@@ -85,7 +84,7 @@ export const createShoppingCart = () => {
 
   // Public API
   return {
-    addItem(item: Omit<CartItem, 'quantity'>, quantity = 1): void {
+    addItem(item: Omit<CartItem, "quantity">, quantity = 1): void {
       const existingIndex = findItemIndex(item.id);
 
       if (existingIndex !== -1) {
@@ -122,12 +121,12 @@ export const createShoppingCart = () => {
     },
 
     getItems(): readonly CartItem[] {
-      return items.map(item => ({ ...item }));
+      return items.map((item) => ({ ...item }));
     },
 
     getTotal(): number {
       const subtotal = calculateSubtotal();
-      return subtotal - (subtotal * discount / 100);
+      return subtotal - (subtotal * discount) / 100;
     },
 
     getItemCount(): number {
@@ -141,17 +140,16 @@ export const createShoppingCart = () => {
   };
 };
 
-
 // ============================================
 // EXAMPLE 3: Logger Module with Levels
 // ============================================
 
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+type LogLevel = "debug" | "info" | "warn" | "error";
 
 export const LoggerModule = (() => {
   // Private configuration
   const logs: { level: LogLevel; message: string; timestamp: Date }[] = [];
-  let currentLevel: LogLevel = 'info';
+  let currentLevel: LogLevel = "info";
   let isEnabled = true;
 
   const levels: Record<LogLevel, number> = {
@@ -185,38 +183,42 @@ export const LoggerModule = (() => {
     },
 
     debug(message: string): void {
-      if (shouldLog('debug')) {
-        const formatted = formatMessage('debug', message);
+      if (shouldLog("debug")) {
+        const formatted = formatMessage("debug", message);
         console.log(formatted);
-        logs.push({ level: 'debug', message, timestamp: new Date() });
+        logs.push({ level: "debug", message, timestamp: new Date() });
       }
     },
 
     info(message: string): void {
-      if (shouldLog('info')) {
-        const formatted = formatMessage('info', message);
+      if (shouldLog("info")) {
+        const formatted = formatMessage("info", message);
         console.info(formatted);
-        logs.push({ level: 'info', message, timestamp: new Date() });
+        logs.push({ level: "info", message, timestamp: new Date() });
       }
     },
 
     warn(message: string): void {
-      if (shouldLog('warn')) {
-        const formatted = formatMessage('warn', message);
+      if (shouldLog("warn")) {
+        const formatted = formatMessage("warn", message);
         console.warn(formatted);
-        logs.push({ level: 'warn', message, timestamp: new Date() });
+        logs.push({ level: "warn", message, timestamp: new Date() });
       }
     },
 
     error(message: string): void {
-      if (shouldLog('error')) {
-        const formatted = formatMessage('error', message);
+      if (shouldLog("error")) {
+        const formatted = formatMessage("error", message);
         console.error(formatted);
-        logs.push({ level: 'error', message, timestamp: new Date() });
+        logs.push({ level: "error", message, timestamp: new Date() });
       }
     },
 
-    getLogs(): readonly { level: LogLevel; message: string; timestamp: Date }[] {
+    getLogs(): readonly {
+      level: LogLevel;
+      message: string;
+      timestamp: Date;
+    }[] {
       return [...logs];
     },
 
@@ -225,7 +227,6 @@ export const LoggerModule = (() => {
     },
   };
 })();
-
 
 // ============================================
 // EXAMPLE 4: API Service Module (Revealing Module Pattern)
@@ -238,7 +239,7 @@ export const createApiService = (baseUrl: string) => {
 
   // Private methods
   const makeRequest = async <T>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: "GET" | "POST" | "PUT" | "DELETE",
     endpoint: string,
     body?: unknown
   ): Promise<T> => {
@@ -248,11 +249,13 @@ export const createApiService = (baseUrl: string) => {
     requestCount[method.toLowerCase() as keyof typeof requestCount]++;
 
     // Simulate API call (in real app, use fetch with headers)
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
     if (authToken) {
-      headers['Authorization'] = `Bearer ${authToken}`;
+      headers["Authorization"] = `Bearer ${authToken}`;
     }
-    console.log(`[API] ${method} ${url}`, { headers, body: body || '' });
+    console.log(`[API] ${method} ${url}`, { headers, body: body || "" });
 
     // Return mock response for demo
     return { success: true, method, endpoint } as T;
@@ -268,19 +271,19 @@ export const createApiService = (baseUrl: string) => {
   };
 
   const get = <T>(endpoint: string): Promise<T> => {
-    return makeRequest<T>('GET', endpoint);
+    return makeRequest<T>("GET", endpoint);
   };
 
   const post = <T>(endpoint: string, data: unknown): Promise<T> => {
-    return makeRequest<T>('POST', endpoint, data);
+    return makeRequest<T>("POST", endpoint, data);
   };
 
   const put = <T>(endpoint: string, data: unknown): Promise<T> => {
-    return makeRequest<T>('PUT', endpoint, data);
+    return makeRequest<T>("PUT", endpoint, data);
   };
 
   const del = <T>(endpoint: string): Promise<T> => {
-    return makeRequest<T>('DELETE', endpoint);
+    return makeRequest<T>("DELETE", endpoint);
   };
 
   const getStats = () => ({ ...requestCount });

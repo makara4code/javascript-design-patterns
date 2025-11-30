@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { UserModel, UserPresenter } from "./MVPPattern";
 import type { IUserView, UserData } from "./MVPPattern";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -48,9 +43,9 @@ export const MVPPatternDemo = () => {
     isActive: true,
   });
 
-  const [currentFilter, setCurrentFilter] = useState<
-    UserData["role"] | "all"
-  >("all");
+  const [currentFilter, setCurrentFilter] = useState<UserData["role"] | "all">(
+    "all"
+  );
   const [searchQuery, setSearchQuery] = useState("");
 
   const viewImplementation: IUserView = useMemo(
@@ -327,7 +322,10 @@ export const MVPPatternDemo = () => {
                 <Select
                   value={formData.role}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, role: value as UserData["role"] })
+                    setFormData({
+                      ...formData,
+                      role: value as UserData["role"],
+                    })
                   }
                 >
                   <SelectTrigger className="w-32">
@@ -342,7 +340,11 @@ export const MVPPatternDemo = () => {
               </div>
               <div className="flex gap-3">
                 <Button type="submit">Add User</Button>
-                <Button type="button" variant="outline" onClick={handleCancelAdd}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancelAdd}
+                >
                   Cancel
                 </Button>
               </div>
@@ -380,7 +382,10 @@ export const MVPPatternDemo = () => {
                 <Select
                   value={formData.role}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, role: value as UserData["role"] })
+                    setFormData({
+                      ...formData,
+                      role: value as UserData["role"],
+                    })
                   }
                 >
                   <SelectTrigger className="w-32">

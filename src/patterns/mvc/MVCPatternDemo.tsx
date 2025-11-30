@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { TodoModel, TodoController } from "./MVCPattern";
 import type { TodoItem, FilterType } from "./MVCPattern";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
