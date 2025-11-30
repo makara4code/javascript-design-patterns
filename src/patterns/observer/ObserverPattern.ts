@@ -26,7 +26,6 @@ export interface Subject<T> {
   notify(data: T): void;
 }
 
-
 // ============================================
 // EXAMPLE 2: Event Emitter (Pub/Sub Pattern)
 // ============================================
@@ -56,7 +55,7 @@ export class EventEmitter {
   emit<T>(event: string, data: T): void {
     const callbacks = this.events.get(event);
     if (callbacks) {
-      callbacks.forEach(callback => callback(data));
+      callbacks.forEach((callback) => callback(data));
     }
   }
 
@@ -81,7 +80,6 @@ export class EventEmitter {
   }
 }
 
-
 // ============================================
 // EXAMPLE 3: Observable Store (State Management)
 // ============================================
@@ -101,7 +99,7 @@ export class ObservableStore<T> implements Subject<T> {
   setState(newState: T | ((prev: T) => T)): void {
     const previousState = this.state;
 
-    if (typeof newState === 'function') {
+    if (typeof newState === "function") {
       this.state = (newState as (prev: T) => T)(previousState);
     } else {
       this.state = newState;
@@ -124,10 +122,9 @@ export class ObservableStore<T> implements Subject<T> {
   }
 
   notify(data: T): void {
-    this.observers.forEach(observer => observer.update(data));
+    this.observers.forEach((observer) => observer.update(data));
   }
 }
-
 
 // ============================================
 // EXAMPLE 4: News Publisher Example
@@ -164,7 +161,7 @@ export class NewsPublisher {
     this.subscribers.delete(subscriberId);
   }
 
-  publish(article: Omit<NewsArticle, 'id' | 'publishedAt'>): NewsArticle {
+  publish(article: Omit<NewsArticle, "id" | "publishedAt">): NewsArticle {
     const newArticle: NewsArticle = {
       ...article,
       id: ++this.articleIdCounter,
@@ -174,9 +171,9 @@ export class NewsPublisher {
     this.articles.push(newArticle);
 
     // Notify only subscribers interested in this category
-    this.subscribers.forEach(subscriber => {
+    this.subscribers.forEach((subscriber) => {
       if (
-        subscriber.categories.includes('all') ||
+        subscriber.categories.includes("all") ||
         subscriber.categories.includes(article.category)
       ) {
         subscriber.onNews(newArticle);
@@ -194,7 +191,6 @@ export class NewsPublisher {
     return this.subscribers.size;
   }
 }
-
 
 // ============================================
 // EXAMPLE 5: Stock Price Observer
@@ -253,7 +249,7 @@ export class StockTicker {
     // Notify all observers watching this stock
     const observers = this.observers.get(symbol);
     if (observers) {
-      observers.forEach(observer => observer(stockPrice));
+      observers.forEach((observer) => observer(stockPrice));
     }
   }
 
@@ -265,7 +261,6 @@ export class StockTicker {
     return new Map(this.prices);
   }
 }
-
 
 // ============================================
 // EXAMPLE 6: Form Validation Observer
@@ -319,10 +314,10 @@ export class FormValidator {
 
   private validateField(field: string): void {
     const validators = this.validators.get(field) || [];
-    const value = this.state.values[field] || '';
+    const value = this.state.values[field] || "";
     const errors: string[] = [];
 
-    validators.forEach(validator => {
+    validators.forEach((validator) => {
       errors.push(...validator(value));
     });
 
@@ -335,12 +330,12 @@ export class FormValidator {
 
   private updateFormValidity(): void {
     this.state.isValid = Object.values(this.state.validations).every(
-      v => v.isValid
+      (v) => v.isValid
     );
   }
 
   validateAll(): void {
-    Object.keys(this.state.values).forEach(field => {
+    Object.keys(this.state.values).forEach((field) => {
       this.validateField(field);
     });
     this.updateFormValidity();
@@ -358,7 +353,7 @@ export class FormValidator {
   }
 
   private notifyObservers(): void {
-    this.observers.forEach(observer => observer({ ...this.state }));
+    this.observers.forEach((observer) => observer({ ...this.state }));
   }
 
   getState(): FormState {
@@ -378,17 +373,27 @@ export class FormValidator {
 
 // Common validators
 export const validators = {
-  required: (fieldName: string) => (value: string): string[] =>
-    value.trim() ? [] : [`${fieldName} is required`],
+  required:
+    (fieldName: string) =>
+    (value: string): string[] =>
+      value.trim() ? [] : [`${fieldName} is required`],
 
-  minLength: (min: number, fieldName: string) => (value: string): string[] =>
-    value.length >= min ? [] : [`${fieldName} must be at least ${min} characters`],
+  minLength:
+    (min: number, fieldName: string) =>
+    (value: string): string[] =>
+      value.length >= min
+        ? []
+        : [`${fieldName} must be at least ${min} characters`],
 
-  email: () => (value: string): string[] => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value) ? [] : ['Invalid email format'];
-  },
+  email:
+    () =>
+    (value: string): string[] => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(value) ? [] : ["Invalid email format"];
+    },
 
-  pattern: (regex: RegExp, message: string) => (value: string): string[] =>
-    regex.test(value) ? [] : [message],
+  pattern:
+    (regex: RegExp, message: string) =>
+    (value: string): string[] =>
+      regex.test(value) ? [] : [message],
 };

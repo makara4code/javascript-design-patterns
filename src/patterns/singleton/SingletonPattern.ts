@@ -17,8 +17,8 @@
  * - Can hide dependencies
  */
 
-import { mockApi } from '../../api/mockApi';
-import type { User, Product, Task } from '../../api/mockApi';
+import { mockApi } from "../../api/mockApi";
+import type { User, Product, Task } from "../../api/mockApi";
 
 // ============================================
 // EXAMPLE 1: Basic Singleton (ES6 Class)
@@ -31,11 +31,11 @@ export class ConfigurationManager {
   // Private constructor prevents direct instantiation
   private constructor() {
     // Initialize with defaults
-    this.config.set('apiUrl', 'https://api.example.com');
-    this.config.set('timeout', 5000);
-    this.config.set('maxRetries', 3);
-    this.config.set('theme', 'light');
-    this.config.set('language', 'en');
+    this.config.set("apiUrl", "https://api.example.com");
+    this.config.set("timeout", 5000);
+    this.config.set("maxRetries", 3);
+    this.config.set("theme", "light");
+    this.config.set("language", "en");
   }
 
   // Static method to get the single instance
@@ -60,18 +60,17 @@ export class ConfigurationManager {
 
   reset(): void {
     this.config.clear();
-    this.config.set('apiUrl', 'https://api.example.com');
-    this.config.set('timeout', 5000);
-    this.config.set('maxRetries', 3);
+    this.config.set("apiUrl", "https://api.example.com");
+    this.config.set("timeout", 5000);
+    this.config.set("maxRetries", 3);
   }
 }
-
 
 // ============================================
 // EXAMPLE 2: Logger Singleton
 // ============================================
 
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+type LogLevel = "debug" | "info" | "warn" | "error";
 
 interface LogEntry {
   level: LogLevel;
@@ -83,7 +82,7 @@ interface LogEntry {
 export class Logger {
   private static instance: Logger;
   private logs: LogEntry[] = [];
-  private level: LogLevel = 'info';
+  private level: LogLevel = "info";
   private maxLogs = 1000;
 
   private readonly levelPriority: Record<LogLevel, number> = {
@@ -132,49 +131,49 @@ export class Logger {
     }
 
     // Console output
-    const formattedMessage = `[${entry.timestamp.toISOString()}] [${level.toUpperCase()}]${context ? ` [${context}]` : ''} ${message}`;
+    const formattedMessage = `[${entry.timestamp.toISOString()}] [${level.toUpperCase()}]${context ? ` [${context}]` : ""} ${message}`;
 
     switch (level) {
-      case 'debug':
+      case "debug":
         console.debug(formattedMessage);
         break;
-      case 'info':
+      case "info":
         console.info(formattedMessage);
         break;
-      case 'warn':
+      case "warn":
         console.warn(formattedMessage);
         break;
-      case 'error':
+      case "error":
         console.error(formattedMessage);
         break;
     }
   }
 
   debug(message: string, context?: string): void {
-    this.log('debug', message, context);
+    this.log("debug", message, context);
   }
 
   info(message: string, context?: string): void {
-    this.log('info', message, context);
+    this.log("info", message, context);
   }
 
   warn(message: string, context?: string): void {
-    this.log('warn', message, context);
+    this.log("warn", message, context);
   }
 
   error(message: string, context?: string): void {
-    this.log('error', message, context);
+    this.log("error", message, context);
   }
 
   getLogs(filter?: { level?: LogLevel; context?: string }): LogEntry[] {
     let filtered = [...this.logs];
 
     if (filter?.level) {
-      filtered = filtered.filter(log => log.level === filter.level);
+      filtered = filtered.filter((log) => log.level === filter.level);
     }
 
     if (filter?.context) {
-      filtered = filtered.filter(log => log.context === filter.context);
+      filtered = filtered.filter((log) => log.context === filter.context);
     }
 
     return filtered;
@@ -184,7 +183,6 @@ export class Logger {
     this.logs = [];
   }
 }
-
 
 // ============================================
 // EXAMPLE 3: Cache Manager Singleton
@@ -271,7 +269,6 @@ export class CacheManager {
   }
 }
 
-
 // ============================================
 // EXAMPLE 4: Database Connection Pool Singleton
 // ============================================
@@ -300,12 +297,15 @@ export class ConnectionPool {
 
   async acquire(): Promise<Connection> {
     // Try to find an available connection
-    const available = this.connections.find(conn => !conn.inUse);
+    const available = this.connections.find((conn) => !conn.inUse);
 
     if (available) {
       available.inUse = true;
       available.lastUsed = new Date();
-      Logger.getInstance().debug(`Reusing connection ${available.id}`, 'ConnectionPool');
+      Logger.getInstance().debug(
+        `Reusing connection ${available.id}`,
+        "ConnectionPool"
+      );
       return available;
     }
 
@@ -319,21 +319,32 @@ export class ConnectionPool {
       };
 
       this.connections.push(newConnection);
-      Logger.getInstance().info(`Created new connection ${newConnection.id}`, 'ConnectionPool');
+      Logger.getInstance().info(
+        `Created new connection ${newConnection.id}`,
+        "ConnectionPool"
+      );
       return newConnection;
     }
 
     // Wait and retry
-    Logger.getInstance().warn('Pool exhausted, waiting for available connection', 'ConnectionPool');
-    await new Promise(resolve => setTimeout(resolve, 100));
+    Logger.getInstance().warn(
+      "Pool exhausted, waiting for available connection",
+      "ConnectionPool"
+    );
+    await new Promise((resolve) => setTimeout(resolve, 100));
     return this.acquire();
   }
 
   release(connectionId: string): void {
-    const connection = this.connections.find(conn => conn.id === connectionId);
+    const connection = this.connections.find(
+      (conn) => conn.id === connectionId
+    );
     if (connection) {
       connection.inUse = false;
-      Logger.getInstance().debug(`Released connection ${connectionId}`, 'ConnectionPool');
+      Logger.getInstance().debug(
+        `Released connection ${connectionId}`,
+        "ConnectionPool"
+      );
     }
   }
 
@@ -343,7 +354,7 @@ export class ConnectionPool {
     available: number;
     maxConnections: number;
   } {
-    const inUse = this.connections.filter(conn => conn.inUse).length;
+    const inUse = this.connections.filter((conn) => conn.inUse).length;
     return {
       total: this.connections.length,
       inUse,
@@ -358,10 +369,9 @@ export class ConnectionPool {
 
   closeAll(): void {
     this.connections = [];
-    Logger.getInstance().info('All connections closed', 'ConnectionPool');
+    Logger.getInstance().info("All connections closed", "ConnectionPool");
   }
 }
-
 
 // ============================================
 // EXAMPLE 5: Application State Store (Using Mock API)
@@ -410,7 +420,7 @@ export class AppStore {
   }
 
   private notify(): void {
-    this.listeners.forEach(listener => listener(this.state));
+    this.listeners.forEach((listener) => listener(this.state));
   }
 
   private setState(partial: Partial<AppState>): void {
@@ -423,10 +433,10 @@ export class AppStore {
     try {
       const users = await mockApi.users.getAll();
       this.setState({ users, loading: false, lastUpdated: new Date() });
-      Logger.getInstance().info('Users loaded successfully', 'AppStore');
-    } catch (error) {
-      this.setState({ error: 'Failed to load users', loading: false });
-      Logger.getInstance().error('Failed to load users', 'AppStore');
+      Logger.getInstance().info("Users loaded successfully", "AppStore");
+    } catch {
+      this.setState({ error: "Failed to load users", loading: false });
+      Logger.getInstance().error("Failed to load users", "AppStore");
     }
   }
 
@@ -435,10 +445,10 @@ export class AppStore {
     try {
       const products = await mockApi.products.getAll();
       this.setState({ products, loading: false, lastUpdated: new Date() });
-      Logger.getInstance().info('Products loaded successfully', 'AppStore');
-    } catch (error) {
-      this.setState({ error: 'Failed to load products', loading: false });
-      Logger.getInstance().error('Failed to load products', 'AppStore');
+      Logger.getInstance().info("Products loaded successfully", "AppStore");
+    } catch {
+      this.setState({ error: "Failed to load products", loading: false });
+      Logger.getInstance().error("Failed to load products", "AppStore");
     }
   }
 
@@ -447,10 +457,10 @@ export class AppStore {
     try {
       const tasks = await mockApi.tasks.getAll();
       this.setState({ tasks, loading: false, lastUpdated: new Date() });
-      Logger.getInstance().info('Tasks loaded successfully', 'AppStore');
-    } catch (error) {
-      this.setState({ error: 'Failed to load tasks', loading: false });
-      Logger.getInstance().error('Failed to load tasks', 'AppStore');
+      Logger.getInstance().info("Tasks loaded successfully", "AppStore");
+    } catch {
+      this.setState({ error: "Failed to load tasks", loading: false });
+      Logger.getInstance().error("Failed to load tasks", "AppStore");
     }
   }
 
@@ -469,10 +479,10 @@ export class AppStore {
         loading: false,
         lastUpdated: new Date(),
       });
-      Logger.getInstance().info('All data loaded successfully', 'AppStore');
-    } catch (error) {
-      this.setState({ error: 'Failed to load data', loading: false });
-      Logger.getInstance().error('Failed to load data', 'AppStore');
+      Logger.getInstance().info("All data loaded successfully", "AppStore");
+    } catch {
+      this.setState({ error: "Failed to load data", loading: false });
+      Logger.getInstance().error("Failed to load data", "AppStore");
     }
   }
 

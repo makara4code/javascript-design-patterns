@@ -201,10 +201,7 @@ export const PrototypePatternDemo = () => {
             ) : (
               <div className="space-y-3">
                 {vehicles.map((vehicle, index) => (
-                  <div
-                    key={index}
-                    className="bg-background p-3 rounded border"
-                  >
+                  <div key={index} className="bg-background p-3 rounded border">
                     <strong>{vehicle.describe()}</strong>
                     <p className="text-sm text-muted-foreground">
                       Features: {vehicle.config.features.join(", ")}
@@ -259,10 +256,7 @@ export const PrototypePatternDemo = () => {
             ) : (
               <div className="space-y-3">
                 {documents.map((doc, index) => (
-                  <div
-                    key={index}
-                    className="bg-background p-3 rounded border"
-                  >
+                  <div key={index} className="bg-background p-3 rounded border">
                     <strong>{doc.title}</strong>
                     <p className="text-sm text-muted-foreground">
                       By: {doc.author}
@@ -291,7 +285,10 @@ export const PrototypePatternDemo = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-3">
-            <Button variant="outline" onClick={() => createCharacter("warrior")}>
+            <Button
+              variant="outline"
+              onClick={() => createCharacter("warrior")}
+            >
               Create Warrior
             </Button>
             <Button variant="outline" onClick={() => createCharacter("mage")}>

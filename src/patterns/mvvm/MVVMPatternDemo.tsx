@@ -1,11 +1,6 @@
 import { useProductViewModel } from "./MVVMPattern";
 import type { SortField } from "./MVVMPattern";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -87,7 +82,9 @@ export const MVVMPatternDemo = () => {
               View
             </Badge>
             <div className="text-center">
-              <div className="text-muted-foreground text-sm">⇅ Data Binding</div>
+              <div className="text-muted-foreground text-sm">
+                ⇅ Data Binding
+              </div>
             </div>
             <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300 px-4 py-2">
               ViewModel
@@ -124,10 +121,7 @@ export const MVVMPatternDemo = () => {
               <div className="flex flex-wrap gap-4 items-center">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">Category:</span>
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={setCategory}
-                  >
+                  <Select value={selectedCategory} onValueChange={setCategory}>
                     <SelectTrigger className="w-40">
                       <SelectValue />
                     </SelectTrigger>
@@ -256,10 +250,7 @@ export const MVVMPatternDemo = () => {
                     Status:{" "}
                     {selectedProduct.inStock ? "Available" : "Out of Stock"}
                   </p>
-                  <Button
-                    variant="outline"
-                    onClick={() => selectProduct(null)}
-                  >
+                  <Button variant="outline" onClick={() => selectProduct(null)}>
                     Close
                   </Button>
                 </div>
@@ -348,7 +339,11 @@ export const MVVMPatternDemo = () => {
                   </div>
 
                   <div className="flex gap-3">
-                    <Button variant="outline" className="flex-1" onClick={clearCart}>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={clearCart}
+                    >
                       Clear Cart
                     </Button>
                     <Button className="flex-1">Checkout</Button>

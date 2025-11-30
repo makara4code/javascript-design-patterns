@@ -57,9 +57,7 @@ export const router = createBrowserRouter([
 
 // Route configuration for navigation
 export const navConfig = {
-  intro: [
-    { path: "/", label: "Introduction" },
-  ],
+  intro: [{ path: "/", label: "Introduction" }],
   js: [
     { path: "/patterns/module", label: "Module" },
     { path: "/patterns/prototype", label: "Prototype" },

@@ -15,7 +15,7 @@
  * - Easier testing
  */
 
-import { mockApi } from '../../api/mockApi';
+import { mockApi } from "../../api/mockApi";
 
 // ============================================
 // MODEL - Data and Business Logic
@@ -25,7 +25,7 @@ export interface TodoItem {
   id: number;
   title: string;
   completed: boolean;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
   createdAt: Date;
 }
 
@@ -43,24 +43,24 @@ export class TodoModel {
   }
 
   private notifyListeners(): void {
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach((listener) => listener());
   }
 
   // CRUD Operations
   async loadFromApi(): Promise<void> {
     const tasks = await mockApi.tasks.getAll();
-    this.todos = tasks.map(task => ({
+    this.todos = tasks.map((task) => ({
       id: task.id,
       title: task.title,
       completed: task.completed,
       priority: task.priority,
       createdAt: new Date(),
     }));
-    this.idCounter = Math.max(...this.todos.map(t => t.id), 0);
+    this.idCounter = Math.max(...this.todos.map((t) => t.id), 0);
     this.notifyListeners();
   }
 
-  addTodo(title: string, priority: TodoItem['priority'] = 'medium'): TodoItem {
+  addTodo(title: string, priority: TodoItem["priority"] = "medium"): TodoItem {
     const newTodo: TodoItem = {
       id: ++this.idCounter,
       title,
@@ -74,7 +74,7 @@ export class TodoModel {
   }
 
   removeTodo(id: number): boolean {
-    const index = this.todos.findIndex(t => t.id === id);
+    const index = this.todos.findIndex((t) => t.id === id);
     if (index !== -1) {
       this.todos.splice(index, 1);
       this.notifyListeners();
@@ -84,7 +84,7 @@ export class TodoModel {
   }
 
   toggleTodo(id: number): TodoItem | null {
-    const todo = this.todos.find(t => t.id === id);
+    const todo = this.todos.find((t) => t.id === id);
     if (todo) {
       todo.completed = !todo.completed;
       this.notifyListeners();
@@ -93,8 +93,11 @@ export class TodoModel {
     return null;
   }
 
-  updateTodo(id: number, updates: Partial<Omit<TodoItem, 'id' | 'createdAt'>>): TodoItem | null {
-    const todo = this.todos.find(t => t.id === id);
+  updateTodo(
+    id: number,
+    updates: Partial<Omit<TodoItem, "id" | "createdAt">>
+  ): TodoItem | null {
+    const todo = this.todos.find((t) => t.id === id);
     if (todo) {
       Object.assign(todo, updates);
       this.notifyListeners();
@@ -109,19 +112,19 @@ export class TodoModel {
   }
 
   getTodoById(id: number): TodoItem | undefined {
-    return this.todos.find(t => t.id === id);
+    return this.todos.find((t) => t.id === id);
   }
 
   getCompletedTodos(): TodoItem[] {
-    return this.todos.filter(t => t.completed);
+    return this.todos.filter((t) => t.completed);
   }
 
   getPendingTodos(): TodoItem[] {
-    return this.todos.filter(t => !t.completed);
+    return this.todos.filter((t) => !t.completed);
   }
 
-  getTodosByPriority(priority: TodoItem['priority']): TodoItem[] {
-    return this.todos.filter(t => t.priority === priority);
+  getTodosByPriority(priority: TodoItem["priority"]): TodoItem[] {
+    return this.todos.filter((t) => t.priority === priority);
   }
 
   // Statistics
@@ -135,7 +138,7 @@ export class TodoModel {
 
   clearCompleted(): number {
     const completedCount = this.getCompletedTodos().length;
-    this.todos = this.todos.filter(t => !t.completed);
+    this.todos = this.todos.filter((t) => !t.completed);
     this.notifyListeners();
     return completedCount;
   }
@@ -146,27 +149,26 @@ export class TodoModel {
   }
 }
 
-
 // ============================================
 // CONTROLLER - Handles User Input
 // ============================================
 
-export type FilterType = 'all' | 'active' | 'completed';
+export type FilterType = "all" | "active" | "completed";
 
 export interface ControllerState {
   filter: FilterType;
   searchQuery: string;
-  sortBy: 'createdAt' | 'priority' | 'title';
-  sortOrder: 'asc' | 'desc';
+  sortBy: "createdAt" | "priority" | "title";
+  sortOrder: "asc" | "desc";
 }
 
 export class TodoController {
   private model: TodoModel;
   private state: ControllerState = {
-    filter: 'all',
-    searchQuery: '',
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
+    filter: "all",
+    searchQuery: "",
+    sortBy: "createdAt",
+    sortOrder: "desc",
   };
   private stateListeners: Set<() => void> = new Set();
 
@@ -181,7 +183,7 @@ export class TodoController {
   }
 
   private notifyStateListeners(): void {
-    this.stateListeners.forEach(listener => listener());
+    this.stateListeners.forEach((listener) => listener());
   }
 
   getState(): ControllerState {
@@ -193,7 +195,10 @@ export class TodoController {
     await this.model.loadFromApi();
   }
 
-  handleAddTodo(title: string, priority: TodoItem['priority'] = 'medium'): void {
+  handleAddTodo(
+    title: string,
+    priority: TodoItem["priority"] = "medium"
+  ): void {
     if (title.trim()) {
       this.model.addTodo(title.trim(), priority);
     }
@@ -207,7 +212,10 @@ export class TodoController {
     this.model.toggleTodo(id);
   }
 
-  handleUpdateTodo(id: number, updates: Partial<Omit<TodoItem, 'id' | 'createdAt'>>): void {
+  handleUpdateTodo(
+    id: number,
+    updates: Partial<Omit<TodoItem, "id" | "createdAt">>
+  ): void {
     this.model.updateTodo(id, updates);
   }
 
@@ -230,13 +238,13 @@ export class TodoController {
     this.notifyStateListeners();
   }
 
-  setSortBy(sortBy: ControllerState['sortBy']): void {
+  setSortBy(sortBy: ControllerState["sortBy"]): void {
     this.state.sortBy = sortBy;
     this.notifyStateListeners();
   }
 
   toggleSortOrder(): void {
-    this.state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+    this.state.sortOrder = this.state.sortOrder === "asc" ? "desc" : "asc";
     this.notifyStateListeners();
   }
 
@@ -246,18 +254,18 @@ export class TodoController {
 
     // Apply filter
     switch (this.state.filter) {
-      case 'active':
-        todos = todos.filter(t => !t.completed);
+      case "active":
+        todos = todos.filter((t) => !t.completed);
         break;
-      case 'completed':
-        todos = todos.filter(t => t.completed);
+      case "completed":
+        todos = todos.filter((t) => t.completed);
         break;
     }
 
     // Apply search
     if (this.state.searchQuery) {
       const query = this.state.searchQuery.toLowerCase();
-      todos = todos.filter(t => t.title.toLowerCase().includes(query));
+      todos = todos.filter((t) => t.title.toLowerCase().includes(query));
     }
 
     // Apply sort
@@ -265,20 +273,20 @@ export class TodoController {
       let comparison = 0;
 
       switch (this.state.sortBy) {
-        case 'createdAt':
+        case "createdAt":
           comparison = a.createdAt.getTime() - b.createdAt.getTime();
           break;
-        case 'priority': {
+        case "priority": {
           const priorityOrder = { high: 0, medium: 1, low: 2 };
           comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
           break;
         }
-        case 'title':
+        case "title":
           comparison = a.title.localeCompare(b.title);
           break;
       }
 
-      return this.state.sortOrder === 'asc' ? comparison : -comparison;
+      return this.state.sortOrder === "asc" ? comparison : -comparison;
     });
 
     return todos;

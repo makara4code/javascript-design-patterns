@@ -18,7 +18,7 @@
  * - Highly reusable ViewModels
  */
 
-import { mockApi } from '../../api/mockApi';
+import { mockApi } from "../../api/mockApi";
 
 // ============================================
 // MODEL - Data and Business Logic
@@ -43,7 +43,7 @@ export class ProductModel {
 
   async fetchProducts(): Promise<ProductItem[]> {
     const apiProducts = await mockApi.products.getAll();
-    this.products = apiProducts.map(p => ({
+    this.products = apiProducts.map((p) => ({
       ...p,
       quantity: Math.floor(Math.random() * 100) + 1,
     }));
@@ -55,15 +55,15 @@ export class ProductModel {
   }
 
   getProductById(id: number): ProductItem | undefined {
-    return this.products.find(p => p.id === id);
+    return this.products.find((p) => p.id === id);
   }
 
   getCategories(): string[] {
-    return [...new Set(this.products.map(p => p.category))];
+    return [...new Set(this.products.map((p) => p.category))];
   }
 
   updateStock(id: number, quantity: number): void {
-    const product = this.products.find(p => p.id === id);
+    const product = this.products.find((p) => p.id === id);
     if (product) {
       product.quantity = Math.max(0, quantity);
       product.inStock = product.quantity > 0;
@@ -71,13 +71,12 @@ export class ProductModel {
   }
 }
 
-
 // ============================================
 // VIEWMODEL - Presentation Logic and State
 // ============================================
 
-export type SortField = 'name' | 'price' | 'category';
-export type SortOrder = 'asc' | 'desc';
+export type SortField = "name" | "price" | "category";
+export type SortOrder = "asc" | "desc";
 
 export interface ProductViewModelState {
   products: ProductItem[];
@@ -107,10 +106,10 @@ export class ProductViewModel {
       products: [],
       filteredProducts: [],
       categories: [],
-      selectedCategory: 'all',
-      searchQuery: '',
-      sortField: 'name',
-      sortOrder: 'asc',
+      selectedCategory: "all",
+      searchQuery: "",
+      sortField: "name",
+      sortOrder: "asc",
       loading: false,
       error: null,
       cart: [],
@@ -127,7 +126,7 @@ export class ProductViewModel {
   }
 
   private notify(): void {
-    this.listeners.forEach(listener => listener({ ...this.state }));
+    this.listeners.forEach((listener) => listener({ ...this.state }));
   }
 
   private setState(updates: Partial<ProductViewModelState>): void {
@@ -140,16 +139,19 @@ export class ProductViewModel {
     let filtered = [...this.state.products];
 
     // Apply category filter
-    if (this.state.selectedCategory !== 'all') {
-      filtered = filtered.filter(p => p.category === this.state.selectedCategory);
+    if (this.state.selectedCategory !== "all") {
+      filtered = filtered.filter(
+        (p) => p.category === this.state.selectedCategory
+      );
     }
 
     // Apply search filter
     if (this.state.searchQuery) {
       const query = this.state.searchQuery.toLowerCase();
-      filtered = filtered.filter(p =>
-        p.name.toLowerCase().includes(query) ||
-        p.category.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query)
       );
     }
 
@@ -157,17 +159,17 @@ export class ProductViewModel {
     filtered.sort((a, b) => {
       let comparison = 0;
       switch (this.state.sortField) {
-        case 'name':
+        case "name":
           comparison = a.name.localeCompare(b.name);
           break;
-        case 'price':
+        case "price":
           comparison = a.price - b.price;
           break;
-        case 'category':
+        case "category":
           comparison = a.category.localeCompare(b.category);
           break;
       }
-      return this.state.sortOrder === 'asc' ? comparison : -comparison;
+      return this.state.sortOrder === "asc" ? comparison : -comparison;
     });
 
     this.setState({ filteredProducts: filtered });
@@ -195,10 +197,10 @@ export class ProductViewModel {
         loading: false,
       });
       this.updateFilteredProducts();
-    } catch (error) {
+    } catch {
       this.setState({
         loading: false,
-        error: 'Failed to load products',
+        error: "Failed to load products",
       });
     }
   }
@@ -220,7 +222,7 @@ export class ProductViewModel {
 
   toggleSortOrder(): void {
     this.setState({
-      sortOrder: this.state.sortOrder === 'asc' ? 'desc' : 'asc',
+      sortOrder: this.state.sortOrder === "asc" ? "desc" : "asc",
     });
     this.updateFilteredProducts();
   }
@@ -239,7 +241,7 @@ export class ProductViewModel {
     if (!product || !product.inStock) return;
 
     const existingIndex = this.state.cart.findIndex(
-      item => item.product.id === productId
+      (item) => item.product.id === productId
     );
 
     let newCart: CartItemData[];
@@ -264,7 +266,7 @@ export class ProductViewModel {
   }
 
   removeFromCart(productId: number): void {
-    const item = this.state.cart.find(i => i.product.id === productId);
+    const item = this.state.cart.find((i) => i.product.id === productId);
     if (!item) return;
 
     // Restore stock
@@ -275,7 +277,7 @@ export class ProductViewModel {
       this.updateFilteredProducts();
     }
 
-    const newCart = this.state.cart.filter(i => i.product.id !== productId);
+    const newCart = this.state.cart.filter((i) => i.product.id !== productId);
     this.setState({ cart: newCart });
     this.updateCartTotal();
   }
@@ -286,7 +288,7 @@ export class ProductViewModel {
       return;
     }
 
-    const item = this.state.cart.find(i => i.product.id === productId);
+    const item = this.state.cart.find((i) => i.product.id === productId);
     if (!item) return;
 
     const diff = newQuantity - item.quantity;
@@ -297,7 +299,7 @@ export class ProductViewModel {
       this.setState({ products: this.model.getProducts() });
       this.updateFilteredProducts();
 
-      const newCart = this.state.cart.map(i =>
+      const newCart = this.state.cart.map((i) =>
         i.product.id === productId ? { ...i, quantity: newQuantity } : i
       );
       this.setState({ cart: newCart });
@@ -307,10 +309,13 @@ export class ProductViewModel {
 
   clearCart(): void {
     // Restore all stock
-    this.state.cart.forEach(item => {
+    this.state.cart.forEach((item) => {
       const product = this.model.getProductById(item.product.id);
       if (product) {
-        this.model.updateStock(item.product.id, product.quantity + item.quantity);
+        this.model.updateStock(
+          item.product.id,
+          product.quantity + item.quantity
+        );
       }
     });
 
@@ -332,17 +337,18 @@ export class ProductViewModel {
   }
 }
 
-
 // ============================================
 // Custom React Hook for MVVM binding
 // ============================================
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from "react";
 
 export const useProductViewModel = () => {
   const model = useMemo(() => new ProductModel(), []);
   const viewModel = useMemo(() => new ProductViewModel(model), [model]);
-  const [state, setState] = useState<ProductViewModelState>(viewModel.getState());
+  const [state, setState] = useState<ProductViewModelState>(
+    viewModel.getState()
+  );
 
   useEffect(() => {
     const unsubscribe = viewModel.subscribe(setState);
@@ -360,7 +366,8 @@ export const useProductViewModel = () => {
     selectProduct: (id: number | null) => viewModel.selectProduct(id),
     addToCart: (id: number, qty?: number) => viewModel.addToCart(id, qty),
     removeFromCart: (id: number) => viewModel.removeFromCart(id),
-    updateCartQuantity: (id: number, qty: number) => viewModel.updateCartQuantity(id, qty),
+    updateCartQuantity: (id: number, qty: number) =>
+      viewModel.updateCartQuantity(id, qty),
     clearCart: () => viewModel.clearCart(),
     clearError: () => viewModel.clearError(),
     reload: () => viewModel.loadProducts(),
